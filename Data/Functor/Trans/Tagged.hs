@@ -158,6 +158,10 @@ instance MonadState t m => MonadState t (TaggedT s m) where
   state = lift . state
   {-# INLINE state #-}
 
+instance MonadCont m => MonadCont (TaggedT s m) where
+  callCC f = lift . callCC $ \k -> untag (f (tag . k))
+  {-# INLINE callCC #-}
+
 
 instance Foldable f => Foldable (TaggedT s f) where
   foldMap f (TagT x) = foldMap f x
