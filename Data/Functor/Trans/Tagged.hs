@@ -51,8 +51,9 @@ newtype TaggedT s m b = TagT { untagT :: m b }
 
 instance Functor m => Functor (TaggedT s m) where
   fmap f (TagT x) = TagT (fmap f x)
-  b <$ (TagT x) = TagT (b <$ x)
   {-# INLINE fmap #-}
+  b <$ (TagT x) = TagT (b <$ x)
+  {-# INLINE (<$) #-}
 
 instance Contravariant m => Contravariant (TaggedT s m) where
   contramap f (TagT x) = TagT (contramap f x)
