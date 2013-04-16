@@ -33,6 +33,7 @@ import Data.Traversable (Traversable(..))
 import Data.Foldable (Foldable(..))
 import Data.Distributive
 import Data.Functor.Bind
+import Data.Functor.Extend (Extend(..))
 import Data.Functor.Plus
 import Data.Functor.Identity
 import Data.Functor.Contravariant
@@ -135,7 +136,7 @@ instance Distributive f => Distributive (TaggedT s f) where
   distribute = TagT . distribute . fmap untagT
 
 instance Extend f => Extend (TaggedT s f) where
-  extend f (TagT w) = TagT (extend (f . TagT) w)
+  extended f (TagT w) = TagT (extended (f . TagT) w)
 
 instance Comonad w => Comonad (TaggedT s w) where
   extract (TagT w) = extract w
