@@ -22,6 +22,7 @@ module Data.Functor.Trans.Tagged
   , tag, self, selfM, untag
   , retag
   , mapTagT
+  , reflected, reflectedM
   , asTaggedTypeOf
   ) where
 
