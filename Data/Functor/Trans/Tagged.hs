@@ -1,3 +1,6 @@
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE UndecidableInstances #-}
 ----------------------------------------------------------------------------
 -- |
 -- Module     : Data.Functor.Trans.Tagged
@@ -24,6 +27,11 @@ import Prelude hiding (foldr, foldl, mapM, sequence, foldr1, foldl1)
 import Control.Applicative
 import Control.Monad (liftM, MonadPlus(..))
 import Control.Monad.Fix
+import Control.Monad.Trans (MonadIO(..), MonadTrans(..))
+import Control.Monad.Reader (MonadReader(..))
+import Control.Monad.Writer (MonadWriter(..))
+import Control.Monad.State (MonadState(..))
+import Control.Monad.Cont (MonadCont(..))
 import Control.Monad.Trans.Class
 import Control.Comonad.Trans.Class
 import Control.Comonad.Hoist.Class
@@ -67,14 +75,6 @@ instance Apply m => Apply (TaggedT s m) where
   TagT f <.  TagT x = TagT (f <.  x)
   {-# INLINE (<. ) #-}
 
-instance Alt m => Alt (TaggedT s m) where
-  TagT a <!> TagT b = TagT (a <!> b)
-  {-# INLINE (<!>) #-}
-
-instance Plus m => Plus (TaggedT s m) where
-  zero = TagT zero
-  {-# INLINE zero #-}
-
 instance Applicative m => Applicative (TaggedT s m) where
   pure = TagT . pure
   {-# INLINE pure #-}
@@ -84,12 +84,6 @@ instance Applicative m => Applicative (TaggedT s m) where
   {-# INLINE ( *>) #-}
   TagT f <*  TagT x = TagT (f <*  x)
   {-# INLINE (<* ) #-}
-
-instance Alternative m => Alternative (TaggedT s m) where
-  empty = TagT empty
-  {-# INLINE empty #-}
-  TagT a <|> TagT b = TagT (a <|> b)
-  {-# INLINE (<|>) #-}
 
 instance Bind m => Bind (TaggedT s m) where
   TagT m >>- k = TagT (m >>- untagT . k)
@@ -103,19 +97,67 @@ instance Monad m => Monad (TaggedT s m) where
   TagT m >> TagT n = TagT (m >> n)
   {-# INLINE (>>) #-}
 
+
+instance Alt m => Alt (TaggedT s m) where
+  TagT a <!> TagT b = TagT (a <!> b)
+  {-# INLINE (<!>) #-}
+
+instance Alternative m => Alternative (TaggedT s m) where
+  empty = TagT empty
+  {-# INLINE empty #-}
+  TagT a <|> TagT b = TagT (a <|> b)
+  {-# INLINE (<|>) #-}
+
+instance Plus m => Plus (TaggedT s m) where
+  zero = TagT zero
+  {-# INLINE zero #-}
+
 instance MonadPlus m => MonadPlus (TaggedT s m) where
   mzero = TagT mzero
   {-# INLINE mzero #-}
   mplus (TagT a) (TagT b) = TagT (mplus a b)
   {-# INLINE mplus #-}
 
+
 instance MonadFix m => MonadFix (TaggedT s m) where
   mfix f = TagT $ mfix (untagT . f)
   {-# INLINE mfix #-}
 
+
 instance MonadTrans (TaggedT s) where
   lift = TagT
   {-# INLINE lift #-}
+
+instance MonadIO m => MonadIO (TaggedT s m) where
+  liftIO = lift . liftIO
+  {-# INLINE liftIO #-}
+
+instance MonadWriter w m => MonadWriter w (TaggedT s m) where
+  writer = lift . writer
+  {-# INLINE writer #-}
+  tell = lift . tell
+  {-# INLINE tell #-}
+  listen = lift . listen . untag
+  {-# INLINE listen #-}
+  pass = lift . pass . untag
+  {-# INLINE pass #-}
+
+instance MonadReader r m => MonadReader r (TaggedT s m) where
+  ask = lift ask
+  {-# INLINE ask #-}
+  local f = lift . local f . untag
+  {-# INLINE local #-}
+  reader = lift . reader
+  {-# INLINE reader #-}
+
+instance MonadState t m => MonadState t (TaggedT s m) where
+  get = lift get
+  {-# INLINE get #-}
+  put = lift . put
+  {-# INLINE put #-}
+  state = lift . state
+  {-# INLINE state #-}
+
 
 instance Foldable f => Foldable (TaggedT s f) where
   foldMap f (TagT x) = foldMap f x
@@ -145,6 +187,7 @@ instance Distributive f => Distributive (TaggedT s f) where
   distribute = TagT . distribute . fmap untagT
   {-# INLINE distribute #-}
 
+
 instance Extend f => Extend (TaggedT s f) where
   extended f (TagT w) = TagT (extended (f . TagT) w)
   {-# INLINE extended #-}
@@ -153,9 +196,11 @@ instance Comonad w => Comonad (TaggedT s w) where
   extract (TagT w) = extract w
   {-# INLINE extract #-}
 
+
 instance ComonadTrans (TaggedT s) where
   lower (TagT w) = w
   {-# INLINE lower #-}
+
 
 instance ComonadHoist (TaggedT s) where
   cohoist = TagT . Identity . extract . untagT
