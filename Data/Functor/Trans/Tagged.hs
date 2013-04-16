@@ -69,9 +69,11 @@ instance Apply m => Apply (TaggedT s m) where
 
 instance Alt m => Alt (TaggedT s m) where
   TagT a <!> TagT b = TagT (a <!> b)
+  {-# INLINE (<!>) #-}
 
 instance Plus m => Plus (TaggedT s m) where
   zero = TagT zero
+  {-# INLINE zero #-}
 
 instance Applicative m => Applicative (TaggedT s m) where
   pure = TagT . pure
@@ -85,10 +87,13 @@ instance Applicative m => Applicative (TaggedT s m) where
 
 instance Alternative m => Alternative (TaggedT s m) where
   empty = TagT empty
+  {-# INLINE empty #-}
   TagT a <|> TagT b = TagT (a <|> b)
+  {-# INLINE (<|>) #-}
 
 instance Bind m => Bind (TaggedT s m) where
   TagT m >>- k = TagT (m >>- untagT . k)
+  {-# INLINE (>>-) #-}
 
 instance Monad m => Monad (TaggedT s m) where
   return = TagT . return
@@ -100,13 +105,17 @@ instance Monad m => Monad (TaggedT s m) where
 
 instance MonadPlus m => MonadPlus (TaggedT s m) where
   mzero = TagT mzero
+  {-# INLINE mzero #-}
   mplus (TagT a) (TagT b) = TagT (mplus a b)
+  {-# INLINE mplus #-}
 
 instance MonadFix m => MonadFix (TaggedT s m) where
   mfix f = TagT $ mfix (untagT . f)
+  {-# INLINE mfix #-}
 
 instance MonadTrans (TaggedT s) where
   lift = TagT
+  {-# INLINE lift #-}
 
 instance Foldable f => Foldable (TaggedT s f) where
   foldMap f (TagT x) = foldMap f x
@@ -134,18 +143,23 @@ instance Traversable f => Traversable (TaggedT s f) where
 
 instance Distributive f => Distributive (TaggedT s f) where
   distribute = TagT . distribute . fmap untagT
+  {-# INLINE distribute #-}
 
 instance Extend f => Extend (TaggedT s f) where
   extended f (TagT w) = TagT (extended (f . TagT) w)
+  {-# INLINE extended #-}
 
 instance Comonad w => Comonad (TaggedT s w) where
   extract (TagT w) = extract w
+  {-# INLINE extract #-}
 
 instance ComonadTrans (TaggedT s) where
   lower (TagT w) = w
+  {-# INLINE lower #-}
 
 instance ComonadHoist (TaggedT s) where
   cohoist = TagT . Identity . extract . untagT
+  {-# INLINE cohoist #-}
 
 -- | Some times you need to change the tag you have lying around.
 -- Idiomatic usage is to make a new combinator for the relationship between the
