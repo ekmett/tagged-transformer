@@ -1,5 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE UndecidableInstances #-}
 ----------------------------------------------------------------------------
 -- |
@@ -43,6 +45,8 @@ import Data.Functor.Extend (Extend(..))
 import Data.Functor.Plus (Alt(..), Plus(..))
 import Data.Functor.Identity (Identity(..))
 import Data.Functor.Contravariant (Contravariant(..))
+import Data.Proxy (Proxy(..))
+import Data.Reflection (Reifies(..))
 
 -- | A @'Tagged' s b@ value is a value @b@ with an attached phantom type @s@.
 -- This can be used in place of the more traditional but less safe idiom of
@@ -247,6 +251,17 @@ self = tag . pure
 selfM :: Monad m => a -> TaggedT s m a
 selfM = tag . return
 {-# INLINE selfM #-}
+
+
+-- | Reflect reified value back in 'Applicative' context
+reflected :: forall s m a. (Applicative m, Reifies s a) => TaggedT s m a
+reflected = tag . pure . reflect $ (Proxy :: Proxy s)
+{-# INLINE reflected #-}
+
+-- | Reflect reified value back in 'Monad' context
+reflectedM :: forall s m a. (Monad m, Reifies s a) => TaggedT s m a
+reflectedM = tag . return . reflect $ (Proxy :: Proxy s)
+{-# INLINE reflectedM #-}
 
 
 -- | 'asTaggedTypeOf' is a type-restricted version of 'const'. It is usually used as an infix operator, and its typing forces its first argument (which is usually overloaded) to have the same type as the tag of the second.
