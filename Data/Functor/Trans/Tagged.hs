@@ -24,25 +24,25 @@ module Data.Functor.Trans.Tagged
   ) where
 
 import Prelude hiding (foldr, foldl, mapM, sequence, foldr1, foldl1)
-import Control.Applicative
+import Control.Applicative (Alternative(..), Applicative(..), (<$), (<$>))
 import Control.Monad (liftM, MonadPlus(..))
-import Control.Monad.Fix
+import Control.Monad.Fix (MonadFix(..))
 import Control.Monad.Trans (MonadIO(..), MonadTrans(..))
 import Control.Monad.Reader (MonadReader(..))
 import Control.Monad.Writer (MonadWriter(..))
 import Control.Monad.State (MonadState(..))
 import Control.Monad.Cont (MonadCont(..))
-import Control.Comonad.Trans.Class
-import Control.Comonad.Hoist.Class
-import Control.Comonad
+import Control.Comonad.Trans.Class (ComonadTrans(..))
+import Control.Comonad.Hoist.Class (ComonadHoist(..))
+import Control.Comonad (Comonad(..))
 import Data.Traversable (Traversable(..))
 import Data.Foldable (Foldable(..))
-import Data.Distributive
+import Data.Distributive (Distributive(..))
 import Data.Functor.Bind (Apply(..), Bind(..))
 import Data.Functor.Extend (Extend(..))
 import Data.Functor.Plus (Alt(..), Plus(..))
-import Data.Functor.Identity
-import Data.Functor.Contravariant
+import Data.Functor.Identity (Identity(..))
+import Data.Functor.Contravariant (Contravariant(..))
 
 -- | A @'Tagged' s b@ value is a value @b@ with an attached phantom type @s@.
 -- This can be used in place of the more traditional but less safe idiom of
