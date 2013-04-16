@@ -32,9 +32,9 @@ import Control.Comonad
 import Data.Traversable (Traversable(..))
 import Data.Foldable (Foldable(..))
 import Data.Distributive
-import Data.Functor.Bind
+import Data.Functor.Bind (Apply(..), Bind(..))
 import Data.Functor.Extend (Extend(..))
-import Data.Functor.Plus
+import Data.Functor.Plus (Alt(..), Plus(..))
 import Data.Functor.Identity
 import Data.Functor.Contravariant
 
