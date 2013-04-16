@@ -28,9 +28,11 @@ library
     comonad                   >= 3        && < 4,
     reflection                >= 1.1.6    && < 2,
     semigroupoids             >= 3.0.2    && < 4,
-    tagged                    >= 0.4.4    && < 1
+    tagged                    >= 0.4.4    && < 1,
+    transformers              >= 0.2      && < 0.4
 
   exposed-modules:
     Data.Functor.Trans.Tagged
 
+  hs-source-dirs: src
   ghc-options: -Wall
