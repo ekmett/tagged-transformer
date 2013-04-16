@@ -32,7 +32,6 @@ import Control.Monad.Reader (MonadReader(..))
 import Control.Monad.Writer (MonadWriter(..))
 import Control.Monad.State (MonadState(..))
 import Control.Monad.Cont (MonadCont(..))
-import Control.Monad.Trans.Class
 import Control.Comonad.Trans.Class
 import Control.Comonad.Hoist.Class
 import Control.Comonad

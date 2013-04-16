@@ -19,13 +19,17 @@ source-repository head
 
 library
   build-depends:
-    base >= 4 && < 5,
-    transformers >= 0.2.2 && < 0.3,
-    comonad >= 0.9.0.1 && < 0.10,
-    distributive >= 0.1 && < 0.2,
-    contravariant >= 0.1.2 && < 0.2,
-    functor-apply >= 0.10.0.2 && < 0.11,
-    comonad-transformers >= 0.10.1 && < 0.11
+    base                      >= 4        && < 5,
+    array                     >= 0.3.0.2  && < 0.5,
+    comonad-transformers      >= 3        && < 4,
+    contravariant             >= 0.3      && < 1,
+    distributive              >= 0.3      && < 1,
+    mtl                       >= 2.0.1    && < 2.2,
+    comonad                   >= 3        && < 4,
+    reflection                >= 1.1.6    && < 2,
+    semigroupoids             >= 3.0.2    && < 4,
+    tagged                    >= 0.4.4    && < 1,
+    transformers              >= 0.2      && < 0.4
 
   exposed-modules:
     Data.Functor.Trans.Tagged
