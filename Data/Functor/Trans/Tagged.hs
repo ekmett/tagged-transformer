@@ -56,6 +56,7 @@ instance Functor m => Functor (TaggedT s m) where
 
 instance Contravariant m => Contravariant (TaggedT s m) where
   contramap f (TagT x) = TagT (contramap f x)
+  {-# INLINE contramap #-}
 
 instance Apply m => Apply (TaggedT s m) where
   TagT f <.> TagT x = TagT (f <.> x)
