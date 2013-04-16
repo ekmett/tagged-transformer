@@ -13,8 +13,7 @@
 module Data.Functor.Trans.Tagged
   (
   -- * Tagged values
-    Tagged
-  , TaggedT(..)
+    TaggedT(..)
   , retag
   , tag, tagSelf
   , untag, untagSelf
@@ -49,7 +48,6 @@ import Data.Functor.Contravariant
 newtype TaggedT s m b = TagT { untagT :: m b }
   deriving ( Eq, Ord, Read, Show )
 
-type Tagged s = TaggedT s Identity
 
 instance Functor m => Functor (TaggedT s m) where
   fmap f (TagT x) = TagT (fmap f x)
@@ -177,21 +175,21 @@ asTaggedTypeOf :: s -> TaggedT s m b -> s
 asTaggedTypeOf = const
 {-# INLINE asTaggedTypeOf #-}
 
-tag :: b -> Tagged s b
-tag = TagT . Identity
+tag :: m b -> TaggedT s m b
+tag = TagT
 {-# INLINE tag #-}
 
-untag :: Tagged s b -> b
-untag = runIdentity . untagT
+untag :: TaggedT s m b -> m b
+untag = untagT
 {-# INLINE untag #-}
 
 -- | Tag a value with its own type.
-tagSelf :: a -> Tagged a a
-tagSelf = tag
+tagSelf :: Monad m => a -> TaggedT s m a
+tagSelf = tag . return
 {-# INLINE tagSelf #-}
 
 -- | 'untagSelf' is a type-restricted version of 'untag'.
-untagSelf :: Tagged a a -> a
+untagSelf :: TaggedT a m a -> m a
 untagSelf = untag
 {-# INLINE untagSelf #-}
 
