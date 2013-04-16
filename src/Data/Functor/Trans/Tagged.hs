@@ -21,7 +21,7 @@ module Data.Functor.Trans.Tagged
     TaggedT(..)
   , tag, self, selfM, untag
   , retag
-  , mapTagT
+  , mapTaggedT
   , reflected, reflectedM
   , asTaggedTypeOf
   ) where
@@ -238,9 +238,9 @@ retag = tag . untag
 
 
 -- | Lift an operation on underlying monad
-mapTagT :: (m a -> n b) -> TaggedT s m a -> TaggedT s n b
-mapTagT f = tag . f . untag
-{-# INLINE mapTagT #-}
+mapTaggedT :: (m a -> n b) -> TaggedT s m a -> TaggedT s n b
+mapTaggedT f = tag . f . untag
+{-# INLINE mapTaggedT #-}
 
 
 -- | Tag value with its own type in 'Applicative' context
