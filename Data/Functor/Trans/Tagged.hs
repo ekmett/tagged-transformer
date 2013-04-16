@@ -14,8 +14,7 @@ module Data.Functor.Trans.Tagged
   (
   -- * Tagged values
     TaggedT(..)
-  , tag, tagSelf
-  , untag, untagSelf
+  , tag, self, selfM, untag
   , retag
   , mapTagT
   , asTaggedTypeOf
@@ -181,7 +180,7 @@ untag = untagT
 -- > retagSucc :: Tagged n a -> Tagged (Succ n) a
 -- > retagSucc = retag
 retag :: TaggedT s m b -> TaggedT t m b
-retag = TagT . untagT
+retag = tag . untag
 {-# INLINE retag #-}
 
 
@@ -191,18 +190,18 @@ mapTagT f = tag . f . untag
 {-# INLINE mapTagT #-}
 
 
+-- | Tag value with its own type in 'Applicative' context
+self :: Applicative m => a -> TaggedT a m a
+self = tag . pure
+{-# INLINE self #-}
+
+-- | Tag value with its own type in 'Monad' context
+selfM :: Monad m => a -> TaggedT s m a
+selfM = tag . return
+{-# INLINE selfM #-}
+
+
 -- | 'asTaggedTypeOf' is a type-restricted version of 'const'. It is usually used as an infix operator, and its typing forces its first argument (which is usually overloaded) to have the same type as the tag of the second.
 asTaggedTypeOf :: s -> TaggedT s m b -> s
 asTaggedTypeOf = const
 {-# INLINE asTaggedTypeOf #-}
-
--- | Tag a value with its own type.
-tagSelf :: Monad m => a -> TaggedT s m a
-tagSelf = tag . return
-{-# INLINE tagSelf #-}
-
--- | 'untagSelf' is a type-restricted version of 'untag'.
-untagSelf :: TaggedT a m a -> m a
-untagSelf = untag
-{-# INLINE untagSelf #-}
-
