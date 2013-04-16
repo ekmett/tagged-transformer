@@ -161,6 +161,17 @@ instance ComonadHoist (TaggedT s) where
   cohoist = TagT . Identity . extract . untagT
   {-# INLINE cohoist #-}
 
+
+-- | Easier to type alias for 'TagT'
+tag :: m b -> TaggedT s m b
+tag = TagT
+{-# INLINE tag #-}
+
+-- | Easier to type alias for 'untagT'
+untag :: TaggedT s m b -> m b
+untag = untagT
+{-# INLINE untag #-}
+
 -- | Some times you need to change the tag you have lying around.
 -- Idiomatic usage is to make a new combinator for the relationship between the
 -- tags that you want to enforce, and define that combinator using 'retag'.
@@ -172,18 +183,11 @@ retag :: TaggedT s m b -> TaggedT t m b
 retag = TagT . untagT
 {-# INLINE retag #-}
 
+
 -- | 'asTaggedTypeOf' is a type-restricted version of 'const'. It is usually used as an infix operator, and its typing forces its first argument (which is usually overloaded) to have the same type as the tag of the second.
 asTaggedTypeOf :: s -> TaggedT s m b -> s
 asTaggedTypeOf = const
 {-# INLINE asTaggedTypeOf #-}
-
-tag :: m b -> TaggedT s m b
-tag = TagT
-{-# INLINE tag #-}
-
-untag :: TaggedT s m b -> m b
-untag = untagT
-{-# INLINE untag #-}
 
 -- | Tag a value with its own type.
 tagSelf :: Monad m => a -> TaggedT s m a
