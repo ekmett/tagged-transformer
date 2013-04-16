@@ -18,15 +18,15 @@ source-repository head
   location: git://github.com/ekmett/tagged-transformer.git
 
 library
-  build-depends: 
+  build-depends:
     base >= 4 && < 5,
     transformers >= 0.2.2 && < 0.3,
-    comonad >= 0.9.0.1 && < 0.10, 
+    comonad >= 0.9.0.1 && < 0.10,
     distributive >= 0.1 && < 0.2,
     contravariant >= 0.1.2 && < 0.2,
     functor-apply >= 0.10.0.2 && < 0.11,
     comonad-transformers >= 0.10.1 && < 0.11
-  
+
   exposed-modules:
     Data.Functor.Trans.Tagged
 
