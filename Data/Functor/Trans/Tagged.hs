@@ -11,7 +11,7 @@
 -------------------------------------------------------------------------------
 
 module Data.Functor.Trans.Tagged
-  ( 
+  (
   -- * Tagged values
     Tagged
   , TaggedT(..)
@@ -39,18 +39,18 @@ import Data.Functor.Contravariant
 
 -- | A @'Tagged' s b@ value is a value @b@ with an attached phantom type @s@.
 -- This can be used in place of the more traditional but less safe idiom of
--- passing in an undefined value with the type, because unlike an @(s -> b)@, 
+-- passing in an undefined value with the type, because unlike an @(s -> b)@,
 -- a @'Tagged' s b@ can't try to use the argument @s@ as a real value.
 --
 -- Moreover, you don't have to rely on the compiler to inline away the extra
 -- argument, because the newtype is "free"
 
-newtype TaggedT s m b = TagT { untagT :: m b } 
+newtype TaggedT s m b = TagT { untagT :: m b }
   deriving ( Eq, Ord, Read, Show )
 
 type Tagged s = TaggedT s Identity
 
-instance Functor m => Functor (TaggedT s m) where 
+instance Functor m => Functor (TaggedT s m) where
   fmap f (TagT x) = TagT (fmap f x)
   b <$ (TagT x) = TagT (b <$ x)
   {-# INLINE fmap #-}
@@ -65,7 +65,7 @@ instance Apply m => Apply (TaggedT s m) where
   {-# INLINE ( .>) #-}
   TagT f <.  TagT x = TagT (f <.  x)
   {-# INLINE (<. ) #-}
-  
+
 instance Alt m => Alt (TaggedT s m) where
   TagT a <!> TagT b = TagT (a <!> b)
 
@@ -102,7 +102,7 @@ instance MonadPlus m => MonadPlus (TaggedT s m) where
   mplus (TagT a) (TagT b) = TagT (mplus a b)
 
 instance MonadFix m => MonadFix (TaggedT s m) where
-  mfix f = TagT $ mfix (untagT . f) 
+  mfix f = TagT $ mfix (untagT . f)
 
 instance MonadTrans (TaggedT s) where
   lift = TagT
@@ -116,7 +116,7 @@ instance Foldable f => Foldable (TaggedT s f) where
   {-# INLINE foldr #-}
   foldl f z (TagT x) = foldl f z x
   {-# INLINE foldl #-}
-  foldl1 f (TagT x) = foldl1 f x 
+  foldl1 f (TagT x) = foldl1 f x
   {-# INLINE foldl1 #-}
   foldr1 f (TagT x) = foldr1 f x
   {-# INLINE foldr1 #-}
@@ -139,7 +139,7 @@ instance Extend f => Extend (TaggedT s f) where
 
 instance Comonad w => Comonad (TaggedT s w) where
   extract (TagT w) = extract w
-  
+
 instance ComonadTrans (TaggedT s) where
   lower (TagT w) = w
 
