@@ -1,5 +1,5 @@
 name:           tagged-transformer
-version:        0.3
+version:        0.3.1
 license:        BSD3
 license-file:   LICENSE
 author:         Edward A. Kmett
@@ -12,6 +12,8 @@ copyright:      2011 Edward A. Kmett
 description:    Provides newtype wrappers for phantom types to avoid unsafely passing dummy arguments
 build-type:     Simple
 cabal-version:  >=1.6
+extra-source-files: .travis.yml CHANGELOG.markdown
+
 
 source-repository head
   type: git
