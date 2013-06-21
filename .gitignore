@@ -1,3 +1,13 @@
-_darcs
 dist
-cabal-dev
+docs
+wiki
+TAGS
+tags
+wip
+.DS_Store
+.*.swp
+.*.swo
+*.o
+*.hi
+*~
+*#
