@@ -33,6 +33,7 @@ module Data.Functor.Trans.Tagged
 import Prelude hiding (foldr, foldl, mapM, sequence, foldr1, foldl1)
 import Control.Applicative (Alternative(..), Applicative(..), (<$), (<$>))
 import Control.Monad (liftM, MonadPlus(..))
+import Control.Monad.Catch (MonadCatch(..))
 import Control.Monad.Fix (MonadFix(..))
 import Control.Monad.Trans (MonadIO(..), MonadTrans(..))
 import Control.Monad.Reader (MonadReader(..))
@@ -217,6 +218,16 @@ instance ComonadTrans (TaggedT s) where
 instance ComonadHoist (TaggedT s) where
   cohoist = TagT . Identity . extract . untagT
   {-# INLINE cohoist #-}
+
+
+instance MonadCatch m => MonadCatch (TaggedT s m) where
+  throwM e = lift $ throwM e
+  {-# INLINE throwM #-}
+  catch m f = tag (catch (untag m) (untag . f))
+  {-# INLINE catch #-}
+  mask a = tag $ mask $ \u -> untag (a $ q u)
+    where q u = tag . u . untag
+  {-# INLINE mask #-}
 
 
 -- | Easier to type alias for 'TagT'
