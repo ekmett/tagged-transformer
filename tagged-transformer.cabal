@@ -1,5 +1,5 @@
 name:           tagged-transformer
-version:        0.3.1
+version:        0.4
 license:        BSD3
 license-file:   LICENSE
 author:         Edward A. Kmett
@@ -26,13 +26,14 @@ source-repository head
 
 library
   build-depends:
-    base                      >= 4        && < 5,
     array                     >= 0.3.0.2  && < 0.5,
+    base                      >= 4        && < 5,
+    comonad                   >= 3        && < 4,
     comonad-transformers      >= 3        && < 4,
     contravariant             >= 0.3      && < 1,
     distributive              >= 0.3      && < 1,
+    exceptions                >= 0.1.1    && < 0.2,
     mtl                       >= 2.0.1    && < 2.2,
-    comonad                   >= 3        && < 4,
     reflection                >= 1.1.6    && < 2,
     semigroupoids             >= 3.0.2    && < 4,
     tagged                    >= 0.4.4    && < 1,
