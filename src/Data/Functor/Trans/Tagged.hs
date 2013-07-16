@@ -30,7 +30,11 @@ module Data.Functor.Trans.Tagged
   , asTaggedTypeOf
   ) where
 
+#if defined(__GLASGOW_HASKELL__) && (__GLASGOW_HASKELL__ >= 706)
 import Prelude hiding (foldr, foldl, mapM, sequence, foldr1, foldl1)
+#else
+import Prelude hiding (catch, foldr, foldl, mapM, sequence, foldr1, foldl1)
+#endif
 import Control.Applicative (Alternative(..), Applicative(..), (<$), (<$>))
 import Control.Monad (liftM, MonadPlus(..))
 import Control.Monad.Catch (MonadCatch(..))
