@@ -1,3 +1,7 @@
+0.4.1
+---
+* Build fixes for GHC < 7.6
+
 0.4
 ---
 * Added `MonadCatch` instance.
