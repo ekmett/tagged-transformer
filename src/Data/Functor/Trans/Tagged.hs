@@ -146,8 +146,10 @@ instance MonadIO m => MonadIO (TaggedT s m) where
   {-# INLINE liftIO #-}
 
 instance MonadWriter w m => MonadWriter w (TaggedT s m) where
+#if MIN_VERSION_mtl(2,1,0)
   writer = lift . writer
   {-# INLINE writer #-}
+#endif
   tell = lift . tell
   {-# INLINE tell #-}
   listen = lift . listen . untag
@@ -160,16 +162,20 @@ instance MonadReader r m => MonadReader r (TaggedT s m) where
   {-# INLINE ask #-}
   local f = lift . local f . untag
   {-# INLINE local #-}
+#if MIN_VERSION_mtl(2,1,0)
   reader = lift . reader
   {-# INLINE reader #-}
+#endif
 
 instance MonadState t m => MonadState t (TaggedT s m) where
   get = lift get
   {-# INLINE get #-}
   put = lift . put
   {-# INLINE put #-}
+#if MIN_VERSION_mtl(2,1,0)
   state = lift . state
   {-# INLINE state #-}
+#endif
 
 instance MonadCont m => MonadCont (TaggedT s m) where
   callCC f = lift . callCC $ \k -> untag (f (tag . k))
