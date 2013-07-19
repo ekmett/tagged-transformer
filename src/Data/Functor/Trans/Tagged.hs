@@ -64,7 +64,7 @@ import Data.Reflection (Reifies(..))
 -- a @'Tagged' s b@ can't try to use the argument @s@ as a real value.
 --
 -- Moreover, you don't have to rely on the compiler to inline away the extra
--- argument, because the newtype is "free"
+-- argument, because the newtype is \"free\"
 
 newtype TaggedT s m b = TagT { untagT :: m b }
   deriving ( Eq, Ord, Read, Show )
