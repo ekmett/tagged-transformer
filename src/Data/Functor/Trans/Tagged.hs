@@ -10,7 +10,7 @@
 ----------------------------------------------------------------------------
 -- |
 -- Module     : Data.Functor.Trans.Tagged
--- Copyright  : 2011 Edward Kmett
+-- Copyright  : 2011-2013 Edward Kmett
 -- License    : BSD3
 --
 -- Maintainer  : Edward Kmett <ekmett@gmail.com>
@@ -128,7 +128,6 @@ instance MonadPlus m => MonadPlus (TaggedT s m) where
   mplus (TagT a) (TagT b) = TagT (mplus a b)
   {-# INLINE mplus #-}
 
-
 instance MonadFix m => MonadFix (TaggedT s m) where
   mfix f = TagT $ mfix (untagT . f)
   {-# INLINE mfix #-}
@@ -216,7 +215,6 @@ instance Comonad w => Comonad (TaggedT s w) where
 instance ComonadTrans (TaggedT s) where
   lower (TagT w) = w
   {-# INLINE lower #-}
-
 
 instance ComonadHoist (TaggedT s) where
   cohoist f = TagT . f . untagT
