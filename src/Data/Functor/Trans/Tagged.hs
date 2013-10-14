@@ -53,7 +53,6 @@ import Data.Distributive (Distributive(..))
 import Data.Functor.Bind (Apply(..), Bind(..))
 import Data.Functor.Extend (Extend(..))
 import Data.Functor.Plus (Alt(..), Plus(..))
-import Data.Functor.Identity (Identity(..))
 import Data.Functor.Contravariant (Contravariant(..))
 import Data.Proxy (Proxy(..))
 import Data.Reflection (Reifies(..))
@@ -226,7 +225,7 @@ instance ComonadTrans (TaggedT s) where
 
 
 instance ComonadHoist (TaggedT s) where
-  cohoist = TagT . Identity . extract . untagT
+  cohoist f = TagT . f . untagT
   {-# INLINE cohoist #-}
 
 
