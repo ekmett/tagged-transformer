@@ -1,6 +1,7 @@
 0.5
 ---
 * Updated dependencies
+* Added `uninterruptiblMask` to the `MonadCatch` instance.
 
 0.4.1
 ---

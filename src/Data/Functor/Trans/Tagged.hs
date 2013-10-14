@@ -237,6 +237,9 @@ instance MonadCatch m => MonadCatch (TaggedT s m) where
   mask a = tag $ mask $ \u -> untag (a $ q u)
     where q u = tag . u . untag
   {-# INLINE mask #-}
+  uninterruptibleMask a = tag $ uninterruptibleMask $ \u -> untag (a $ q u)
+    where q u = tag . u . untag
+  {-# INLINE uninterruptibleMask#-}
 
 
 -- | Easier to type alias for 'TagT'
