@@ -1,3 +1,7 @@
+0.5
+---
+* Updated dependencies
+
 0.4.1
 ---
 * Build fixes for GHC < 7.6
