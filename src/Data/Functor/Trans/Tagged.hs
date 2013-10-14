@@ -23,7 +23,7 @@ module Data.Functor.Trans.Tagged
   (
   -- * Tagged values
     TaggedT(..)
-  , tag, self, selfM, untag
+  , tag, untag
   , retag
   , mapTaggedT
   , reflected, reflectedM
@@ -68,7 +68,6 @@ import Data.Reflection (Reifies(..))
 newtype TaggedT s m b = TagT { untagT :: m b }
   deriving ( Eq, Ord, Read, Show )
 
-
 instance Functor m => Functor (TaggedT s m) where
   fmap f (TagT x) = TagT (fmap f x)
   {-# INLINE fmap #-}
@@ -109,7 +108,6 @@ instance Monad m => Monad (TaggedT s m) where
   TagT m >> TagT n = TagT (m >> n)
   {-# INLINE (>>) #-}
 
-
 instance Alt m => Alt (TaggedT s m) where
   TagT a <!> TagT b = TagT (a <!> b)
   {-# INLINE (<!>) #-}
@@ -134,7 +132,6 @@ instance MonadPlus m => MonadPlus (TaggedT s m) where
 instance MonadFix m => MonadFix (TaggedT s m) where
   mfix f = TagT $ mfix (untagT . f)
   {-# INLINE mfix #-}
-
 
 instance MonadTrans (TaggedT s) where
   lift = TagT
@@ -180,7 +177,6 @@ instance MonadCont m => MonadCont (TaggedT s m) where
   callCC f = lift . callCC $ \k -> untag (f (tag . k))
   {-# INLINE callCC #-}
 
-
 instance Foldable f => Foldable (TaggedT s f) where
   foldMap f (TagT x) = foldMap f x
   {-# INLINE foldMap #-}
@@ -209,7 +205,6 @@ instance Distributive f => Distributive (TaggedT s f) where
   distribute = TagT . distribute . fmap untagT
   {-# INLINE distribute #-}
 
-
 instance Extend f => Extend (TaggedT s f) where
   extended f (TagT w) = TagT (extended (f . TagT) w)
   {-# INLINE extended #-}
@@ -217,7 +212,6 @@ instance Extend f => Extend (TaggedT s f) where
 instance Comonad w => Comonad (TaggedT s w) where
   extract (TagT w) = extract w
   {-# INLINE extract #-}
-
 
 instance ComonadTrans (TaggedT s) where
   lower (TagT w) = w
@@ -227,7 +221,6 @@ instance ComonadTrans (TaggedT s) where
 instance ComonadHoist (TaggedT s) where
   cohoist f = TagT . f . untagT
   {-# INLINE cohoist #-}
-
 
 instance MonadCatch m => MonadCatch (TaggedT s m) where
   throwM e = lift $ throwM e
@@ -240,7 +233,6 @@ instance MonadCatch m => MonadCatch (TaggedT s m) where
   uninterruptibleMask a = tag $ uninterruptibleMask $ \u -> untag (a $ q u)
     where q u = tag . u . untag
   {-# INLINE uninterruptibleMask#-}
-
 
 -- | Easier to type alias for 'TagT'
 tag :: m b -> TaggedT s m b
@@ -263,23 +255,10 @@ retag :: TaggedT s m b -> TaggedT t m b
 retag = tag . untag
 {-# INLINE retag #-}
 
-
 -- | Lift an operation on underlying monad
 mapTaggedT :: (m a -> n b) -> TaggedT s m a -> TaggedT s n b
 mapTaggedT f = tag . f . untag
 {-# INLINE mapTaggedT #-}
-
-
--- | Tag value with its own type in 'Applicative' context
-self :: Applicative m => a -> TaggedT a m a
-self = tag . pure
-{-# INLINE self #-}
-
--- | Tag value with its own type in 'Monad' context
-selfM :: Monad m => a -> TaggedT s m a
-selfM = tag . return
-{-# INLINE selfM #-}
-
 
 -- | Reflect reified value back in 'Applicative' context
 reflected :: forall s m a. (Applicative m, Reifies s a) => TaggedT s m a
@@ -290,7 +269,6 @@ reflected = tag . pure . reflect $ (Proxy :: Proxy s)
 reflectedM :: forall s m a. (Monad m, Reifies s a) => TaggedT s m a
 reflectedM = tag . return . reflect $ (Proxy :: Proxy s)
 {-# INLINE reflectedM #-}
-
 
 -- | 'asTaggedTypeOf' is a type-restricted version of 'const'. It is usually used as an infix operator, and its typing forces its first argument (which is usually overloaded) to have the same type as the tag of the second.
 asTaggedTypeOf :: s -> TaggedT s m b -> s

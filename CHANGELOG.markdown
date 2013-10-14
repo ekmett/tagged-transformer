@@ -1,3 +1,7 @@
+0.6
+---
+* Removed `self`/`selfM`. Use `pure` and `return`.
+
 0.5
 ---
 * Updated dependencies
