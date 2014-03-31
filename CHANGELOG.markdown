@@ -1,3 +1,7 @@
+0.6.2
+---
+* Allow exceptions 0.4
+
 0.6.1
 ---
 * Update dependencies
