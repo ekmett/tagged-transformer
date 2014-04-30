@@ -1,3 +1,7 @@
+0.6.3
+---
+* Removed unused `array` dependency
+
 0.6.2
 ---
 * Allow exceptions 0.4
