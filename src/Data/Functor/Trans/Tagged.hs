@@ -37,7 +37,7 @@ import Prelude hiding (catch, foldr, foldl, mapM, sequence, foldr1, foldl1)
 #endif
 import Control.Applicative (Alternative(..), Applicative(..), (<$), (<$>))
 import Control.Monad (liftM, MonadPlus(..))
-import Control.Monad.Catch (MonadCatch(..), MonadThrow(..))
+import Control.Monad.Catch (MonadCatch(..), MonadThrow(..), MonadMask(..))
 import Control.Monad.Fix (MonadFix(..))
 import Control.Monad.Trans (MonadIO(..), MonadTrans(..))
 import Control.Monad.Reader (MonadReader(..))
@@ -227,6 +227,8 @@ instance MonadThrow m => MonadThrow (TaggedT s m) where
 instance MonadCatch m => MonadCatch (TaggedT s m) where
   catch m f = tag (catch (untag m) (untag . f))
   {-# INLINE catch #-}
+
+instance MonadMask m => MonadMask (TaggedT s m) where
   mask a = tag $ mask $ \u -> untag (a $ q u)
     where q u = tag . u . untag
   {-# INLINE mask #-}
