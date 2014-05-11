@@ -1,5 +1,5 @@
 name:           tagged-transformer
-version:        0.6.4
+version:        0.6.5
 license:        BSD3
 license-file:   LICENSE
 author:         Edward A. Kmett
@@ -31,11 +31,10 @@ library
     contravariant             >= 0.3      && < 1,
     distributive              >= 0.3      && < 1,
     exceptions                >= 0.6      && < 1,
-    mtl                       >= 2.0.1    && < 2.2,
+    mtl                       >= 2.0.1    && < 2.3,
     reflection                >= 1.1.6    && < 2,
     semigroupoids             >= 4        && < 5,
-    tagged                    >= 0.4.4    && < 1,
-    transformers              >= 0.2      && < 0.4
+    tagged                    >= 0.4.4    && < 1
 
   exposed-modules:
     Data.Functor.Trans.Tagged
