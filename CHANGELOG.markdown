@@ -1,3 +1,8 @@
+0.6.5
+---
+* Relaxed `mtl` upper bound
+* Removed unused `transformers` dependency
+
 0.6.4
 ---
 * Allow exceptions 0.6
