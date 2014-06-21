@@ -70,7 +70,9 @@ import Data.Functor.Bind (Apply(..), Bind(..))
 import Data.Functor.Extend (Extend(..))
 import Data.Functor.Plus (Alt(..), Plus(..))
 import Data.Functor.Contravariant (Contravariant(..))
+#if !(defined(__GLASGOW_HASKELL__)) || __GLASGOW_HASKELL__ < 707
 import Data.Proxy (Proxy(..))
+#endif
 import Data.Reflection (Reifies(..))
 
 -- ---------------------------------------------------------------------------
