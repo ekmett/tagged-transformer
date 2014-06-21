@@ -1,3 +1,9 @@
+0.7.0
+---
+* Enable `-XPolyKinds`
+* Added the Tagged monad synonym
+* Added useful functions currently in Data.Tagged for both Tagged and TaggedT
+
 0.6.5
 ---
 * Relaxed `mtl` upper bound
