@@ -1,4 +1,4 @@
-0.7.0
+0.7
 ---
 * Enable `-XPolyKinds`
 * Added the Tagged monad synonym
