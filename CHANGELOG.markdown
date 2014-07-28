@@ -1,3 +1,7 @@
+0.7.1
+-----
+* Support for `contravariant` 1.0
+
 0.7
 ---
 * Enable `-XPolyKinds`
