@@ -49,7 +49,11 @@ import Prelude hiding (foldr, foldl, mapM, sequence, foldr1, foldl1)
 #else
 import Prelude hiding (catch, foldr, foldl, mapM, sequence, foldr1, foldl1)
 #endif
+#if __GLASGOW_HASKELL__ < 710
 import Control.Applicative (Alternative(..), Applicative(..), (<$), (<$>))
+#else
+import Control.Applicative (Alternative(..))
+#endif
 import Control.Monad (liftM, MonadPlus(..))
 import Control.Monad.Catch (MonadCatch(..), MonadThrow(..), MonadMask(..))
 import Control.Monad.Fix (MonadFix(..))
