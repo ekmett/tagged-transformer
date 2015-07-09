@@ -294,6 +294,8 @@ instance Extend f => Extend (TaggedT s f) where
 instance Comonad w => Comonad (TaggedT s w) where
   extract (TagT w) = extract w
   {-# INLINE extract #-}
+  duplicate (TagT w) = TagT (extend TagT w)
+  {-# INLINE duplicate #-}
 
 instance ComonadTrans (TaggedT s) where
   lower (TagT w) = w

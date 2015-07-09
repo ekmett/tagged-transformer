@@ -1,5 +1,5 @@
 name:           tagged-transformer
-version:        0.7.1
+version:        0.8
 license:        BSD3
 license-file:   LICENSE
 author:         Edward A. Kmett
@@ -32,7 +32,7 @@ library
     distributive              >= 0.3      && < 1,
     exceptions                >= 0.6      && < 1,
     mtl                       >= 2.0.1    && < 2.3,
-    reflection                >= 1.1.6    && < 2,
+    reflection                >= 1.1.6    && < 3,
     semigroupoids             >= 4        && < 5,
     tagged                    >= 0.4.4    && < 1
 

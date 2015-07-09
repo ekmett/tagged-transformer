@@ -1,3 +1,8 @@
+0.8
+---
+* `reflection` 2 support
+* Fixed missing `duplicate` implementation in the `Comonad` instance.
+
 0.7.1
 -----
 * Support for `contravariant` 1.0
