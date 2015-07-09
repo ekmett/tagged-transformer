@@ -2,6 +2,7 @@
 ---
 * `reflection` 2 support
 * Fixed missing `duplicate` implementation in the `Comonad` instance.
+* Compile warning-free on GHC 7.10
 
 0.7.1
 -----
