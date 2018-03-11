@@ -324,6 +324,13 @@ instance MonadMask m => MonadMask (TaggedT s m) where
   uninterruptibleMask a = TagT $ uninterruptibleMask $ \u -> untagT (a $ q u)
     where q u = TagT . u . untagT
   {-# INLINE uninterruptibleMask#-}
+#if MIN_VERSION_exceptions(0,10,0)
+  generalBracket acquire release use = TagT $
+    generalBracket
+      (untagT acquire)
+      (\resource exitCase -> untagT (release resource exitCase))
+      (\resource -> untagT (use resource))
+#endif
 
 -- | Easier to type alias for 'TagT'
 tagT :: m b -> TaggedT s m b
