@@ -1,3 +1,7 @@
+next
+----
+* Support `exceptions-0.10.0`.
+
 0.8
 ---
 * `reflection` 2 support
