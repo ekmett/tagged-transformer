@@ -13,7 +13,6 @@ description:    Provides newtype wrappers for phantom types to avoid unsafely pa
 build-type:     Simple
 cabal-version:  >=1.10
 extra-source-files:
-  .travis.yml
   .vim.custom
   .ghci
   .gitignore
