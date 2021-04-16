@@ -188,12 +188,14 @@ instance Bind m => Bind (TaggedT s m) where
   {-# INLINE (>>-) #-}
 
 instance Monad m => Monad (TaggedT s m) where
-  return = TagT . return
-  {-# INLINE return #-}
   TagT m >>= k = TagT (m >>= untagT . k)
   {-# INLINE (>>=) #-}
+#if !(MIN_VERSION_base(4,11,0))
+  return = TagT . return
+  {-# INLINE return #-}
   TagT m >> TagT n = TagT (m >> n)
   {-# INLINE (>>) #-}
+#endif
 
 instance Alt m => Alt (TaggedT s m) where
   TagT a <!> TagT b = TagT (a <!> b)
