@@ -44,7 +44,7 @@ library
     contravariant             >= 0.3      && < 2,
     distributive              >= 0.3      && < 1,
     exceptions                >= 0.6      && < 1,
-    mtl                       >= 2.0.1    && < 2.3,
+    mtl                       >= 2.0.1    && < 2.4,
     reflection                >= 1.1.6    && < 3,
     semigroupoids             >= 4        && < 6,
     tagged                    >= 0.4.4    && < 1
