@@ -4,16 +4,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE CPP #-}
-{-# LANGUAGE CPP #-}
-#ifdef LANGUAGE_DeriveDataTypeable
-{-# LANGUAGE DeriveDataTypeable #-}
-#endif
-#if __GLASGOW_HASKELL__ >= 706
 {-# LANGUAGE PolyKinds #-}
-#endif
-#if __GLASGOW_HASKELL__ >= 702 && __GLASGOW_HASKELL__ < 710
-{-# LANGUAGE Trustworthy #-}
-#endif
 ----------------------------------------------------------------------------
 -- |
 -- Module     : Data.Functor.Trans.Tagged
@@ -44,16 +35,8 @@ module Data.Functor.Trans.Tagged
   , witness, witnessT
   ) where
 
-#if defined(__GLASGOW_HASKELL__) && (__GLASGOW_HASKELL__ >= 706)
 import Prelude hiding (foldr, foldl, mapM, sequence, foldr1, foldl1)
-#else
-import Prelude hiding (catch, foldr, foldl, mapM, sequence, foldr1, foldl1)
-#endif
-#if __GLASGOW_HASKELL__ < 710
-import Control.Applicative (Alternative(..), Applicative(..), (<$), (<$>))
-#else
 import Control.Applicative (Alternative(..))
-#endif
 import Control.Monad (liftM, MonadPlus(..))
 import Control.Monad.Catch (MonadCatch(..), MonadThrow(..), MonadMask(..))
 import Control.Monad.Fix (MonadFix(..))
@@ -67,16 +50,13 @@ import Control.Comonad.Trans.Class (ComonadTrans(..))
 import Control.Comonad.Hoist.Class (ComonadHoist(..))
 import Control.Comonad (Comonad(..))
 import Data.Traversable (Traversable(..))
-import Data.Typeable
 import Data.Foldable (Foldable(..))
 import Data.Distributive (Distributive(..))
 import Data.Functor.Bind (Apply(..), Bind(..))
 import Data.Functor.Extend (Extend(..))
 import Data.Functor.Plus (Alt(..), Plus(..))
 import Data.Functor.Contravariant (Contravariant(..))
-#if !(defined(__GLASGOW_HASKELL__)) || __GLASGOW_HASKELL__ < 707
 import Data.Proxy (Proxy(..))
-#endif
 import Data.Reflection (Reifies(..))
 
 -- ---------------------------------------------------------------------------
@@ -149,11 +129,7 @@ witness x _ = untag x
 -- Moreover, you don't have to rely on the compiler to inline away the extra
 -- argument, because the newtype is \"free\"
 newtype TaggedT s m b = TagT { untagT :: m b }
-  deriving ( Eq, Ord, Read, Show
-#if __GLASGOW_HASKELL__ >= 707
-  , Typeable
-#endif
-  )
+  deriving (Eq, Ord, Read, Show)
 
 instance Functor m => Functor (TaggedT s m) where
   fmap f (TagT x) = TagT (fmap f x)
@@ -230,10 +206,8 @@ instance MonadIO m => MonadIO (TaggedT s m) where
   {-# INLINE liftIO #-}
 
 instance MonadWriter w m => MonadWriter w (TaggedT s m) where
-#if MIN_VERSION_mtl(2,1,0)
   writer = lift . writer
   {-# INLINE writer #-}
-#endif
   tell = lift . tell
   {-# INLINE tell #-}
   listen = lift . listen . untagT
@@ -246,20 +220,16 @@ instance MonadReader r m => MonadReader r (TaggedT s m) where
   {-# INLINE ask #-}
   local f = lift . local f . untagT
   {-# INLINE local #-}
-#if MIN_VERSION_mtl(2,1,0)
   reader = lift . reader
   {-# INLINE reader #-}
-#endif
 
 instance MonadState t m => MonadState t (TaggedT s m) where
   get = lift get
   {-# INLINE get #-}
   put = lift . put
   {-# INLINE put #-}
-#if MIN_VERSION_mtl(2,1,0)
   state = lift . state
   {-# INLINE state #-}
-#endif
 
 instance MonadCont m => MonadCont (TaggedT s m) where
   callCC f = lift . callCC $ \k -> untagT (f (TagT . k))
@@ -326,13 +296,11 @@ instance MonadMask m => MonadMask (TaggedT s m) where
   uninterruptibleMask a = TagT $ uninterruptibleMask $ \u -> untagT (a $ q u)
     where q u = TagT . u . untagT
   {-# INLINE uninterruptibleMask#-}
-#if MIN_VERSION_exceptions(0,10,0)
   generalBracket acquire release use = TagT $
     generalBracket
       (untagT acquire)
       (\resource exitCase -> untagT (release resource exitCase))
       (\resource -> untagT (use resource))
-#endif
 
 -- | Easier to type alias for 'TagT'
 tagT :: m b -> TaggedT s m b

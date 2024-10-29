@@ -1,3 +1,7 @@
+next [????.??.??]
+-----------------
+* Drop support for pre-8.0 versions of GHC.
+
 0.8.2 [2022.05.07]
 ------------------
 * Allow building with `mtl-2.3.*`.
